@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 # ----------------------- МОДЕЛЬ випадкової похибки ----------------------
 n=10000; iter=int(n)                      # кількість реалізацій ВВ ------
 # --------------------- рівномірний закон розводілу ВВ
-S=np.random.rand(iter)                    # генерація ВВ в масив S - параметри закону за замовченням
+S=np.random.exponential(iter, iter)      # генерація ВВ в масив S - параметри закону за замовченням
+print(S)
 mS=np.median(S)                           # математичне сподівання ВВ
 dS=np.var(S)                              # дисперсія ВВ
 scvS=mt.sqrt(dS)                          # дисперсія ВВ
@@ -34,8 +35,8 @@ plt.show()
 # --------------------- нормальний закон розводілу ВВ ---------------------
 dm=0; dsig=5                               # параметри закону розподілу ВВ із систематикою dsig
 #S = np.random.normal(dm, dsig, iter)      # коректура параметрів закону розподілу (1 спосіб)
-S1 = np.random.randn(n)
-S = ((np.random.randn(n))*dsig)+dm         # коректура параметрів закону розподілу (2 спосіб)
+S1 = np.random.exponential(iter, iter)
+S = ((np.random.exponential(iter, iter))*dsig)+dm         # коректура параметрів закону розподілу (2 спосіб)
 mS=np.median(S)
 dS=np.var(S)
 scvS=mt.sqrt(dS)

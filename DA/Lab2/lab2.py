@@ -20,12 +20,12 @@ def variance_homogeneity_check(groupA, groupB):
         print("Дисперсія вибірок не однакова!")
 
 def hypothesis_check(groupA, groupB):
-    test_stat_var, p_value_var = sc.ttest_ind(groupA, groupB)
+    test_stat_var, p_value_var = sc.ttest_ind(groupA, groupB)   #f_oneway
     print(f"Оскільки гіпотеза одностороння використовуюємо p_value/2: {(p_value_var/2)}")
     if p_value_var/2 > 0.05:
-        print("Нульову гіпотезу відхилено!")
+        print("Нульову гіпотезу НЕ відхилено!")
     else:
-        print("Нульову гіпотезу не відхилено!")
+        print("Нульову гіпотезу відхилено!")
 
 data = pd.read_csv("possum.csv")
 eye_size = np.array(data['eye'])
@@ -52,19 +52,19 @@ print(f"P-коефіцієнт кореляції: {pValue}\nТому скорі
 #   4. Чи відрізняється загальна довжина тіла опосумів Вікторії
 #   та інших провінцій? (за допомогою статистичних гіпотез)[totlngth(Vic/other)]
 
-# H0: Довжина тіла опосумів Вікторії <= інших штатів
-# H1: Довжина тіла опосумів Вікторії > інших штатів
+# H0: Відсутня статистично велика різниця між довжинами тіл провінцій
+# H1: Визнається статистично значима різниця між довжинами тіл провінцій
 
 victoria = data[data['Pop'] == 'Vic']
 other = data[data['Pop'] == 'other']
 
-print("\n----------------------\nПеревірка на нормальний розподіл Вікторії")
+print("\n----------------------\nПеревірка на нормальний розподіл Вікторії:")
 normality_check(victoria['totlngth'])
-print("\n----------------------\nПеревірка на нормальний розподіл інших провінцій")
+print("\n----------------------\nПеревірка на нормальний розподіл інших провінцій:")
 normality_check(other['totlngth'])
-print("\n----------------------\nПеревірка на однаковість дисперсій")
+print("\n----------------------\nПеревірка на однаковість дисперсій:")
 variance_homogeneity_check(victoria['totlngth'], other['totlngth'])
-print("\n----------------------\nПеревірка гіпотез на правдивість")
+print("\n----------------------\nПеревірка гіпотез на правдивість:")
 hypothesis_check(victoria['totlngth'], other['totlngth'])
 print(f"\nПеревірка ціх значеть середнім арифметичним:\nУ провінції Вікторія: {np.mean(victoria['totlngth'])} \nУ інших провінціях: {np.mean(other['totlngth'])}\nВірно!Все сходиться")
 
