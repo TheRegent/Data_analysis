@@ -7,7 +7,7 @@ class Lab1():
         self.gener = gener
 
     def array_generate(self):
-        # 1. Генерує випадкові і невипадкові масиви різними способами, зазначеними в теоретичних відомостях.
+        # 1. Generates random and non-random arrays in various ways specified in the theoretical information.
 
         print("-----------------------------Перше завдання-----------------------------\n")
         do_dict = {"array" : (np.array([1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=float)),
@@ -25,8 +25,8 @@ class Lab1():
             print("Помилка! Перевірте правильність введенняю команди.")
 
 
-        # 2. Демонструє звернення до елементів масиву за допомогою індексів, в тому числі від’ємних;
-        # виділення підмасивів як одновимірних, так і багатовимірних масивів.
+        # 2. Demonstrates accessing array elements by index,
+        # including negative selection of subarrays of both one-dimensional and multidimensional arrays.
 
         print("\n-----------------------------Друге завдання-----------------------------\n")
         g = do_dict[self.gener]
@@ -44,7 +44,7 @@ class Lab1():
         print(g[start:end:step])
 
 
-    # 3. Демонструє основні арифметичні операції над масивами, а також роботу методів reduce, accumulate, outer.
+    # 3. Demonstrates basic arithmetic operations on arrays, as well as the work of reduce, accumulate, outer methods.
 
         print("\n-----------------------------Третє завдання-----------------------------\n")
         operation = input("Введіть знак арифметичної операції(+, -, *, /, **, %, reduce, accumulate, outer):")
@@ -65,9 +65,9 @@ class Lab1():
             print("Помилка! Перевірте правильність введенняю знаку.")
 
 
-    # 4. Вираховує статистичні характеристики, а саме, мінімальне і максимальне значення, вибіркові середнє, дисперсію,
-    # середньоквадратичне відхилення, медіану та 25 та 75 персентилі, величини ширина пелюстки (petal_width)
-    # з набору даних щодо квіток ірису (iris.csv).
+    # 4. Calculates statistical characteristics, namely, minimum and maximum value, sample mean,
+    # variance, standard deviation, median and 25th and 75th percentiles, petal width (petal_width)
+    # values from iris flower data set (iris.csv).
 
     def statistic(self):
         print("\n-----------------------------Четверте завдання-----------------------------\n")

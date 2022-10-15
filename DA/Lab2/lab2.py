@@ -20,9 +20,9 @@ def variance_homogeneity_check(groupA, groupB):
         print("Дисперсія вибірок не однакова!")
 
 def hypothesis_check(groupA, groupB):
-    test_stat_var, p_value_var = sc.ttest_ind(groupA, groupB)   #f_oneway
-    print(f"Оскільки гіпотеза одностороння використовуюємо p_value/2: {(p_value_var/2)}")
-    if p_value_var/2 > 0.05:
+    test_stat_var, p_value_var = sc.ttest_ind(groupA, groupB)
+    print(f"P-значеннядля перевірки гіпотези: {(p_value_var)}")
+    if p_value_var > 0.05:
         print("Нульову гіпотезу НЕ відхилено!")
     else:
         print("Нульову гіпотезу відхилено!")
@@ -30,30 +30,25 @@ def hypothesis_check(groupA, groupB):
 data = pd.read_csv("possum.csv")
 eye_size = np.array(data['eye'])
 
-#   1. Знайти розмір, який не перевищують очі 25% опосумів.[eye]
-print(f"Розмір, який не перевищують очі 25% опосумів: {np.percentile(eye_size, 75)}")
+#   1. Find the size that does not exceed the eyes of 25% of opossums. [eye]
+print(f"Розмір, який не перевищують очі 25% опосумів: {np.percentile(eye_size, 25)}")
 
-#   2. Перевірити чи нормально розподілена довжина тіла.[totlngth]
+#   2. Check whether body length is normally distributed.[totlngth]
 lenght = np.array(data['totlngth'])
 normality_check(lenght)
 
-#   3. Чи є зв’язок між довжиною тіла і віком опосума?[totlngth/age]
+#   3. Is there a relationship between body length and opossum age?[totlngth/age]
 age = np.array(data['age'])
-pearson = sc.pearsonr(lenght, age)
-spearman = sc.spearmanr(lenght, age)
-kendalltau = sc.kendalltau(lenght, age)
-
-correlation = np.mean([pearson[0], spearman[0], kendalltau[0]])
-pValue = np.mean([pearson[1], spearman[1], kendalltau[1]])
+correlation, pValue = sc.pearsonr(lenght, age)
 
 print(f"\nКоефіцієнт кореляції: {correlation}")
-print(f"P-коефіцієнт кореляції: {pValue}\nТому скоріш за все кореляції немає")
+print(f"P-значення кореляції: {pValue}\nТому скоріш за все кореляції немає")
 
-#   4. Чи відрізняється загальна довжина тіла опосумів Вікторії
-#   та інших провінцій? (за допомогою статистичних гіпотез)[totlngth(Vic/other)]
+#   4. Is there a difference in total body length between opossums in Victoria
+#   and other provinces? (using statistical hypotheses)[totlngth(Vic/other)]
 
-# H0: Відсутня статистично велика різниця між довжинами тіл провінцій
-# H1: Визнається статистично значима різниця між довжинами тіл провінцій
+# H0: There is no statistically significant difference between the lengths of the bodies of the provinces
+# H1: A statistically significant difference between the lengths of the bodies of the provinces is recognized
 
 victoria = data[data['Pop'] == 'Vic']
 other = data[data['Pop'] == 'other']
