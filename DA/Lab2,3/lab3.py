@@ -10,16 +10,16 @@ tmp = srs['totlngth']
 print(id(tmp))
 print(id(srs['totlngth']))
 
-tmp = srs.iloc[:, 4]
+tmp = srs.iloc[:, 5]
 print(id(tmp))
 
 tmp = srs.loc[:, 'totlngth']
 print(id(tmp))
 
-tmp = srs.iloc[1:5]
+tmp = srs.iloc[1:6]
 print(id(tmp))
 
-tmp.index = ['a', 'b', 'c', 'd']
+tmp.index = ['a', 'b', 'c', 'd', 'e']
 print(id(tmp))
 
 print(id(tmp.loc[['a', 'd']]))
@@ -28,14 +28,14 @@ print(id(tmp.loc[['a', 'd']]))
 #стовпець, що є результатом операцій над іншими стовпцями. Також
 #продемонструвати додавання та видалення рядків, видалення стовпців.
 
-srs['new'] = srs['totlngth'] * srs['age']
-print(srs.head())
+srs['new'] = srs['totlngth'] / srs['age']
+print(id(srs.head()))
 
 srs = srs.append(srs.loc[2])
-print(srs)
+print(id(srs))
 
 srs = srs.drop(columns=['new'], index=[2])
-print(srs)
+print(id(srs))
 
 #3. Встановити один зі стовпців індексом. Визначити основні статистичні
 #характеристики та типи даних всіх стовпців. Змінити тип даних для
@@ -61,18 +61,17 @@ print(srs[srs['site'] == 5])
 #Використати описані в теоретичних відомостях параметри методів merge
 #та concat для різних видів злиття та об’єднання даних цих об’єктів.
 
-types = pd.DataFrame({'possum-par': range(5),'color':['red', 'yellow', 'green', 'black', 'grey']})
-print(types)
+leather_color = pd.DataFrame({'possum-par': range(5),'color':['brown', 'yellow', 'black', 'white', 'grey']})
+print(leather_color)
 
-possum = pd.DataFrame({'name': ['Petro', 'Fedir', 'Ivan', 'Stepan', 'Andriy'], 'type': [3, 2, 4, 0, 1]})
-print(possum)
+possums = pd.DataFrame({'area': ['Mexico', 'Brazil', 'Columbia', 'Ecuador', 'Peru'], 'population': [3, 2, 4, 5, 3]})
+print(possums)
 
-new_possum = pd.DataFrame({'name': ['Lesya'], 'type':[4]})
+new_possum = pd.DataFrame({'area': ['French'], 'population':[1]})
 print(new_possum)
 
-possum = pd.concat([possum, new_possum], axis=0)
-print(possum)
+possums = pd.concat([possums, new_possum], axis=0)
+print(possums)
 
-possum.merge(types, left_on='type', right_on='possum-par')
-
-
+merged_possums = possums.merge(leather_color, left_on='population', right_on='possum-par')
+print(merged_possums)
