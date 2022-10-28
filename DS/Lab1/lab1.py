@@ -1,87 +1,126 @@
-#---------- Лекція 2 - статистичний аналіз характеристик ВВ --------------
 import numpy as np
 import math as mt
 import matplotlib.pyplot as plt
-# ----------------------- МОДЕЛЬ випадкової похибки ----------------------
-n=10000; iter=int(n)                      # кількість реалізацій ВВ ------
-# --------------------- рівномірний закон розводілу ВВ
-S=np.random.exponential(iter, iter)      # генерація ВВ в масив S - параметри закону за замовченням
-print(S)
-mS=np.median(S)                           # математичне сподівання ВВ
-dS=np.var(S)                              # дисперсія ВВ
-scvS=mt.sqrt(dS)                          # дисперсія ВВ
-print('матриця реалізацій ВВ=',S)
-print('матиматичне сподівання ВВ=',mS)
-print('дисперсія ВВ =',dS)
-print('СКВ ВВ=',scvS)
-                                          # гістограма закону розподілу ВВ
-plt.hist(S, bins=20, facecolor="blue", alpha=0.5)
-plt.show()
 
-S=np.zeros((n))
-for i in range(n):
-    S[i]=np.random.randint(0, 100)         # параметри закону задаются межами аргументу
-mS=np.median(S)
-dS=np.var(S)
-scvS=mt.sqrt(dS)
-print('матриця реалізацій ВВ=',S)
-print('матиматичне сподівання ВВ=',mS)
-print('дисперсія ВВ =',dS)
-print('СКВ ВВ=',scvS)
-                                           # гістограма закону розподілу ВВ
-plt.hist(S,  bins=20, facecolor="blue", alpha=0.5)
-plt.show()
+#Закон зміни похибки – експонентційний, рівномірний;
+#Закон зміни досліджуваного процесу – квадратичний, постійна.
 
-# --------------------- нормальний закон розводілу ВВ ---------------------
-dm=0; dsig=5                               # параметри закону розподілу ВВ із систематикою dsig
-#S = np.random.normal(dm, dsig, iter)      # коректура параметрів закону розподілу (1 спосіб)
-S1 = np.random.exponential(iter, iter)
-S = ((np.random.exponential(iter, iter))*dsig)+dm         # коректура параметрів закону розподілу (2 спосіб)
-mS=np.median(S)
-dS=np.var(S)
-scvS=mt.sqrt(dS)
-print('матриця реалізацій ВВ=',S)
-print('матиматичне сподівання ВВ=',mS)
-print('дисперсія ВВ =',dS)
-print('СКВ ВВ=',scvS)
-                                           # гістограма закону розподілу ВВ
-plt.hist(S, bins=20, facecolor="blue", alpha=0.5)
-plt.show()
+def uniform(n):
+    distribution = np.random.rand(n)
+    print(distribution)
+    stats(distribution)
+    plt.xlabel('Uniform Distribution')
+    plt.hist(distribution, bins=20, facecolor="blue", alpha=0.5)
+    plt.show()
+    return distribution
 
-# --------------------- модель виміру (квадратичний закон) з нормальний шумом
-S4=np.zeros((n)); S3=np.zeros((n)); S0=np.zeros((n))
-for i in range(n):
-    S0[i]=(0.0000005*i*i)                 # квадратична модель реального процесу
-    S3[i] = S0[i]+S[i]
-                                          # графік моделі реального процесу
-plt.plot(S3)
-plt.plot(S0)
-plt.ylabel('динаміка продажів')
-plt.show()
+def exponential(n):
+    distribution = np.random.exponential(size = n)
+    print(distribution)
+    stats(distribution)
+    plt.xlabel('Exponential Distribution')
+    plt.hist(distribution, bins=20, facecolor="blue", alpha=0.5)
+    plt.show()
+    return distribution
 
-                                           # гістограми законів розподілу ВВ
-plt.hist(S, bins=20, alpha=0.5, label='S')
-plt.hist(S1, bins=20, alpha=0.5, label='S1')
-plt.hist(S3, bins=20, alpha=0.5, label='S3')
-plt.show()
-                                           # статистичні характеристики трендової вибірки (зміщені)
-mS3=np.median(S3)
-dS3=np.var(S3)
-scvS3=mt.sqrt(dS3)
-print('матиматичне сподівання ВВ3=',mS3)
-print('дисперсія ВВ3 =',dS3)
-print('СКВ ВВ3=',scvS3)
+def square(n, distribution, error, label): # квадратична модель
+    distribution_1 = np.zeros(n)
+    distribution_2 = np.zeros(n)
+    for i in range(n):
+        distribution_2[i] = (error * (i * i))
+        distribution_1[i] = distribution_2[i] + distribution[i]
+    plt.xlabel(label)
+    plt.plot(distribution_1)
+    plt.plot(distribution_2)
+    plt.show()
+    return distribution_1, distribution_2
 
-# --------------------- оцінка статистичних характеристик ВВ з урахуванням динаміки зміни контрольованої велечини
-for i in range(n):
-      S4[i] = (S3[i]-S0[i])              # позбавлення квадратичної складової
-                                            # ПРОБЛЕМАТИКА:
-                                            # 1. Де в реальних задача взяти S0 - Л3
-                                            # 2. Як встановити наявність систематики - dm по формі гістограми
-                                            # 3. Якщо відняти dm гітограм S4 прийде до S - ні, ЧОМУ?
+def constant(n, const, error, distribution, label): # динаміка постійної модель, але треба лінійна
+    masdistribution_3 = distribution_0 = np.zeros(n)
+    for i in range(n):
+        distribution_0[i] = (error * i)*const
+        masdistribution_3[i] = distribution_0[i] + distribution[i]
+    plt.xlabel(label)
+    plt.plot(masdistribution_3)
+    plt.plot(distribution_0)
+    plt.show()
+    return masdistribution_3, distribution_0
 
-plt.hist(S, bins=20, alpha=0.5, label='S')
-plt.hist(S1, bins=20, alpha=0.5, label='S1')
-plt.hist(S3, bins=20, alpha=0.5, label='S3')
-plt.hist(S4, bins=20, alpha=0.5, label='S4')
+def stats(distribution):
+    median_distribution = np.median(distribution)
+    print("Mедіана - ", median_distribution)
+    std_distribution = np.var(distribution)
+    print("Дисперсія - ", std_distribution)
+    skv_distribution = mt.sqrt(std_distribution)
+    print("СКВ - ", skv_distribution)
+
+def assessment(n, distribution_1, distribution_3, distribution_0, distribution, label):
+    distribution_4 = np.zeros(n)
+    for i in range(n):
+        distribution_4[i] = (distribution_3[i] - distribution_0[i])
+    plt.xlabel(label)
+    plt.hist(distribution, bins=20, alpha=0.5, label='distribution')
+    plt.hist(distribution_1, bins=20, alpha=0.5, label='distribution_1')
+    plt.hist(distribution_3, bins=20, alpha=0.5, label='distribution_3')
+    plt.hist(distribution_4, bins=20, alpha=0.5, label='distribution_4')
+    plt.show()
+
+
+n = 17500
+dsigm = 5
+dm = 5
+error = 0.0000005
+distribution = np.random.randn(n)
+const = 5
+
+uniform_distribution = uniform(n)
+exponential_distribution = exponential(n)
+
+#==============================================================================================
+square_uniform, distribution_2 = square(n, uniform_distribution, error, "Динаміка Рівномірна - Квадратична")
+
+plt.xlabel("гістограми законів розподілу Рівномірна - Квадратична")
+plt.hist(uniform_distribution, label='distribution')
+plt.hist(distribution, label='distribution_1')
+plt.hist(square_uniform, label='distribution_3')
 plt.show()
+stats(square_uniform)
+
+assessment(n, distribution, square_uniform, distribution_2, uniform_distribution, "оцінка статистичних характеристик Рівномірна - Квадратична")
+
+#==============================================================================================
+square_exponential, distribution_2 = square(n, exponential_distribution, error, "Динаміка Експоненційна - Квадратична")
+
+plt.xlabel("гістограми законів розподілу Експоненційна - Квадратична")
+plt.hist(exponential_distribution, bins=20, alpha=0.5, label='distribution')
+plt.hist(distribution, bins=20, alpha=0.5, label='distribution_1')
+plt.hist(square_exponential, bins=20, alpha=0.5, label='distribution_3')
+plt.show()
+stats(square_exponential)
+
+assessment(n, distribution, square_exponential, distribution_2, uniform_distribution, "оцінка статистичних характеристик Експоненційна - Квадратична")
+
+#==============================================================================================
+normal_constant, distribution_2 = constant(n, const, error, uniform_distribution, "Динаміка розподілу Рівномірна - Статична")
+
+plt.xlabel("гістограми законів розподілу Рівномірна - Статична")
+plt.hist(uniform_distribution, bins=20, alpha=0.5, label='distribution')
+plt.hist(distribution, bins=20, alpha=0.5, label='distribution_1')
+plt.hist(normal_constant, bins=20, alpha=0.5, label='distribution_3')
+plt.show()
+stats(normal_constant)
+
+assessment(n, distribution, normal_constant, distribution_2, uniform_distribution, "оцінка статистичних характеристик Рівномірна - Cтатична")
+
+#==============================================================================================
+
+exponential_constant, distribution_2  = constant(n, const, error, exponential_distribution, "Динаміка розподілу Експоненційна - Статична")
+
+plt.xlabel("гістограми законів розподілу Експоненційна - Статична")
+plt.hist(exponential_distribution, bins=20, alpha=0.5, label='distribution')
+plt.hist(distribution, bins=20, alpha=0.5, label='distribution_1')
+plt.hist(exponential_constant, bins=20, alpha=0.5, label='distribution_3')
+plt.show()
+stats(exponential_constant)
+
+assessment(n, distribution, exponential_constant, distribution_2, uniform_distribution, "оцінка статистичних характеристик Експоненційна - Квадратична")
